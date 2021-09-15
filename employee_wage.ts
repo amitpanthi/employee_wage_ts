@@ -20,6 +20,7 @@ class EmployeeWage{
         console.log(`Hi ${this.name}, Welcome to Employee Wage!`)
     }
 
+    //UC1
     getAttendance(): number{
         const IS_ABSENT = 2
         this.latestAttendance = Math.floor(Math.random() * 10) % 3 //0 or 1 or 2 
@@ -35,8 +36,14 @@ class EmployeeWage{
         return currEmpAttendance
     }
 
+    //UC2
     calcFullTime(): number{
         return FULL_TIME * WAGE_PER_HR
+    }
+
+    //UC3
+    calcPartTime(): number{
+        return PART_TIME * WAGE_PER_HR
     }
 }
 
