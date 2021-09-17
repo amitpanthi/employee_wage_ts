@@ -5,10 +5,15 @@ const DAYS_IN_MONTH = 20
 
 console.log("Welcome to Employee Wage.")
 
+type dailyWage = {
+    day: number;
+    wage: number;
+}
+
 class EmployeeWage{
     name: string;
     latestAttendance: number;
-    dailyWageBreakdown: Array<number>;
+    dailyWageBreakdown: Array<dailyWage>;
 
     constructor(name: string){
         this.name = name
@@ -217,5 +222,63 @@ class EmployeeWage{
         console.log("Days absent: " + absentCounter)
 
         return [wages, workHours]
+    }
+
+    calculateTotalWages(wages: Array<number>): number{
+        let runningSum = 0
+
+        wages.forEach(wage => runningSum += wage)
+        console.log(runningSum)
+
+        return runningSum
+    }
+    
+
+    printDailyWage(wage_array: Array<number>): Array<dailyWage>{
+        return wage_array.map((wage, currDay) => {
+            console.log(`Day ${++currDay}: ${wage}`)
+            return {
+                day: currDay,
+                wage: wage
+            }
+        })
+    }
+
+
+    printFullTimeWorked(): void{
+        let ftWorkedd = this.dailyWageBreakdown.filter((day) => {
+            return day.wage >= 160
+         })
+
+        console.log(ftWorkedd)
+    }
+
+
+    findFirstFullTime(wage_array: Array<number>): void{
+        let idx = wage_array.findIndex(function(wage){
+            return wage == 160
+        })
+
+        console.log("First full time wage was earned on Day " + (idx + 1))
+    }
+
+
+    checkPartTime(wage_array: Array<number>): void{
+        if(wage_array.find(function(wage){
+            return wage == 80
+        })){
+            console.log("Worker has worked part time")
+        } else {
+            console.log("Worker has not worked part time")
+        }
+    }
+
+
+    checkDaysWorked(wage_array: Array<number>): void{
+        let daysWorked = wage_array.filter(function(wage){
+            return wage >= 80
+        }).length
+
+        console.log("Worker has worked for " + daysWorked + " days")
     }
 }
