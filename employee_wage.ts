@@ -281,4 +281,61 @@ class EmployeeWage{
 
         console.log("Worker has worked for " + daysWorked + " days")
     }
+
+    // UC 10
+    generateEmployeeMap(wage_array: Array<number>): void{
+        let employeeMap = new Map()
+        let runningTotal = 0
+
+        for(let day = 0; day < 20; day++){
+            runningTotal += wage_array[day]
+            employeeMap.set(day+1 , wage_array[day])
+        }
+
+        employeeMap.set("Total", runningTotal)
+
+        console.log(employeeMap)
+    }
+
+    // UC 11
+    generateEmployeeObject(wage_array: Array<number>, hours_array: Array<number>): void{
+        let employeeObjects = []
+
+        for(let day = 0; day < 20; day++){
+            employeeObjects.push({
+                'Day': day+1,
+                'Wage': wage_array[day],
+                'Hours Worked': hours_array[day]
+            })
+        }
+
+        console.log(employeeObjects)
+    }
+
+
+    displayReport(): Array<Array<number>>{
+        this.greet()
+        this.getAttendance()
+        this.getDailyPay()
+        this.getMonthlyPay()
+        this.maxWorkingHours()
+        let employeeStats = this.monthlyPayBreakdown()
+
+        return employeeStats
+    }
+
+    runHelperFunctions(wage_array: Array<number>, hours_array: Array<number>){
+        this.calculateTotalWages(wage_array)
+        this.dailyWageBreakdown = this.printDailyWage(wage_array)
+        this.findFirstFullTime(wage_array)
+        this.checkPartTime(wage_array)
+        this.checkDaysWorked(wage_array)
+        this.printFullTimeWorked()
+        this.generateEmployeeMap(wage_array)
+        this.generateEmployeeObject(wage_array, hours_array)
+    }
 }
+
+let newEmployee = new EmployeeWage("John")
+let employeeStats = newEmployee.displayReport()
+newEmployee.runHelperFunctions(employeeStats[0], employeeStats[1])

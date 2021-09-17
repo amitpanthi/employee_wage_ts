@@ -166,7 +166,7 @@ var EmployeeWage = /** @class */ (function () {
             totalHours += todayHours;
         }
         totalWage = totalHours * WAGE_PER_HR;
-        console.log("----------PER DAY BREAKDOWN MONTHLY PAY----------");
+        console.log("----------PER DAY BREAKDOWN OF MONTHLY PAY----------");
         console.log("Per Day Hours worked: " + workHours.join(", "));
         console.log("Per Day Wage earned: " + wages.join(", "));
         console.log("Total Wage:" + totalWage);
@@ -177,7 +177,93 @@ var EmployeeWage = /** @class */ (function () {
         console.log("Days absent: " + absentCounter);
         return [wages, workHours];
     };
+    EmployeeWage.prototype.calculateTotalWages = function (wages) {
+        var runningSum = 0;
+        wages.forEach(function (wage) { return runningSum += wage; });
+        console.log(runningSum);
+        return runningSum;
+    };
+    EmployeeWage.prototype.printDailyWage = function (wage_array) {
+        return wage_array.map(function (wage, currDay) {
+            console.log("Day " + ++currDay + ": " + wage);
+            return {
+                day: currDay,
+                wage: wage
+            };
+        });
+    };
+    EmployeeWage.prototype.printFullTimeWorked = function () {
+        var ftWorkedd = this.dailyWageBreakdown.filter(function (day) {
+            return day.wage >= 160;
+        });
+        console.log(ftWorkedd);
+    };
+    EmployeeWage.prototype.findFirstFullTime = function (wage_array) {
+        var idx = wage_array.findIndex(function (wage) {
+            return wage == 160;
+        });
+        console.log("First full time wage was earned on Day " + (idx + 1));
+    };
+    EmployeeWage.prototype.checkPartTime = function (wage_array) {
+        if (wage_array.find(function (wage) {
+            return wage == 80;
+        })) {
+            console.log("Worker has worked part time");
+        }
+        else {
+            console.log("Worker has not worked part time");
+        }
+    };
+    EmployeeWage.prototype.checkDaysWorked = function (wage_array) {
+        var daysWorked = wage_array.filter(function (wage) {
+            return wage >= 80;
+        }).length;
+        console.log("Worker has worked for " + daysWorked + " days");
+    };
+    // UC 10
+    EmployeeWage.prototype.generateEmployeeMap = function (wage_array) {
+        var employeeMap = new Map();
+        var runningTotal = 0;
+        for (var day = 0; day < 20; day++) {
+            runningTotal += wage_array[day];
+            employeeMap.set(day + 1, wage_array[day]);
+        }
+        employeeMap.set("Total", runningTotal);
+        console.log(employeeMap);
+    };
+    // UC 11
+    EmployeeWage.prototype.generateEmployeeObject = function (wage_array, hours_array) {
+        var employeeObjects = [];
+        for (var day = 0; day < 20; day++) {
+            employeeObjects.push({
+                'Day': day + 1,
+                'Wage': wage_array[day],
+                'Hours Worked': hours_array[day]
+            });
+        }
+        console.log(employeeObjects);
+    };
+    EmployeeWage.prototype.displayReport = function () {
+        this.greet();
+        this.getAttendance();
+        this.getDailyPay();
+        this.getMonthlyPay();
+        this.maxWorkingHours();
+        var employeeStats = this.monthlyPayBreakdown();
+        return employeeStats;
+    };
+    EmployeeWage.prototype.runHelperFunctions = function (wage_array, hours_array) {
+        this.calculateTotalWages(wage_array);
+        this.dailyWageBreakdown = this.printDailyWage(wage_array);
+        this.findFirstFullTime(wage_array);
+        this.checkPartTime(wage_array);
+        this.checkDaysWorked(wage_array);
+        this.printFullTimeWorked();
+        this.generateEmployeeMap(wage_array);
+        this.generateEmployeeObject(wage_array, hours_array);
+    };
     return EmployeeWage;
 }());
-var newEmp = new EmployeeWage("John");
-newEmp.monthlyPayBreakdown();
+var newEmployee = new EmployeeWage("John");
+var employeeStats = newEmployee.displayReport();
+newEmployee.runHelperFunctions(employeeStats[0], employeeStats[1]);
