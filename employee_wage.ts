@@ -162,6 +162,60 @@ class EmployeeWage{
         console.log("Days absent: " + absentCounter)
     }
 
-    
-}
+    monthlyPayBreakdown(): Array<Array<number>>{
+        let totalWage = 0
+        let totalHours = 0
+        let todayHours = 0
+        let fullTimeCounter = 0
+        let partTimeCounter = 0
+        let absentCounter = 0
+        let wages = []
+        let workHours = []
 
+        for(var day=1; day <= 20; day++){
+            if(totalHours >= 160){
+                break;
+            }
+
+            let currWorkShift = Math.floor(Math.random() * 10) % 3
+            if(day == DAYS_IN_MONTH - 1){
+                currWorkShift = this.latestAttendance
+            }
+
+            switch(currWorkShift){
+                case 1: // Full Time
+                    todayHours = FULL_TIME
+                    fullTimeCounter += 1
+                    break;
+                
+                case 0: // Part Time
+                    todayHours = PART_TIME
+                    partTimeCounter += 1
+                    break;
+                
+                default: //Absent
+                    todayHours = 0
+                    absentCounter += 1
+                    break;
+            }
+
+            workHours.push(todayHours)
+            wages.push(todayHours * WAGE_PER_HR)
+            totalHours += todayHours
+        }
+
+        totalWage = totalHours * WAGE_PER_HR
+
+        console.log("----------PER DAY BREAKDOWN OF MONTHLY PAY----------")
+        console.log("Per Day Hours worked: " + workHours.join(", "))
+        console.log("Per Day Wage earned: " + wages.join(", "))
+        console.log("Total Wage:" + totalWage)
+        console.log("Hours worked:" + totalHours)
+        console.log("Days passed: " + (day - 1))
+        console.log("Days worked Full Time: " + fullTimeCounter)
+        console.log("Days worked Part Time: " + partTimeCounter)
+        console.log("Days absent: " + absentCounter)
+
+        return [wages, workHours]
+    }
+}

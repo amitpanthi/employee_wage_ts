@@ -130,5 +130,54 @@ var EmployeeWage = /** @class */ (function () {
         console.log("Days worked Part Time: " + partTimeCounter);
         console.log("Days absent: " + absentCounter);
     };
+    EmployeeWage.prototype.monthlyPayBreakdown = function () {
+        var totalWage = 0;
+        var totalHours = 0;
+        var todayHours = 0;
+        var fullTimeCounter = 0;
+        var partTimeCounter = 0;
+        var absentCounter = 0;
+        var wages = [];
+        var workHours = [];
+        for (var day = 1; day <= 20; day++) {
+            if (totalHours >= 160) {
+                break;
+            }
+            var currWorkShift = Math.floor(Math.random() * 10) % 3;
+            if (day == DAYS_IN_MONTH - 1) {
+                currWorkShift = this.latestAttendance;
+            }
+            switch (currWorkShift) {
+                case 1: // Full Time
+                    todayHours = FULL_TIME;
+                    fullTimeCounter += 1;
+                    break;
+                case 0: // Part Time
+                    todayHours = PART_TIME;
+                    partTimeCounter += 1;
+                    break;
+                default: //Absent
+                    todayHours = 0;
+                    absentCounter += 1;
+                    break;
+            }
+            workHours.push(todayHours);
+            wages.push(todayHours * WAGE_PER_HR);
+            totalHours += todayHours;
+        }
+        totalWage = totalHours * WAGE_PER_HR;
+        console.log("----------PER DAY BREAKDOWN MONTHLY PAY----------");
+        console.log("Per Day Hours worked: " + workHours.join(", "));
+        console.log("Per Day Wage earned: " + wages.join(", "));
+        console.log("Total Wage:" + totalWage);
+        console.log("Hours worked:" + totalHours);
+        console.log("Days passed: " + (day - 1));
+        console.log("Days worked Full Time: " + fullTimeCounter);
+        console.log("Days worked Part Time: " + partTimeCounter);
+        console.log("Days absent: " + absentCounter);
+        return [wages, workHours];
+    };
     return EmployeeWage;
 }());
+var newEmp = new EmployeeWage("John");
+newEmp.monthlyPayBreakdown();
